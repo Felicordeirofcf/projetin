@@ -7,6 +7,7 @@ from datetime import datetime
 import bcrypt
 import secrets
 
+
 app = FastAPI()
 
 # Libera o front-end acessar a API
