@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const API_URL = process.env.NODE_ENV === "production"
-  ? "https://calculoprojeto.onrender.com"
-  : "http://127.0.0.1:8000";
+// Decide automaticamente qual API usar
+const API_URL = window.location.hostname === "localhost"
+  ? "http://127.0.0.1:8000"
+  : "https://calculoprojeto.onrender.com";
 
 console.log("API URL usada:", API_URL);
 

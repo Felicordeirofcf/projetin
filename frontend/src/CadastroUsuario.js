@@ -1,6 +1,5 @@
-// src/pages/CadastroUsuario.js
 import React, { useState } from "react";
-import api from "../api"; // 👉 Agora importando o api configurado
+import api from "./api"; // 👉 Agora o caminho correto: "./api"
 import {
   Box,
   Button,
@@ -16,7 +15,11 @@ function CadastroUsuario() {
   const [erro, setErro] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value
+    }));
   };
 
   const handleCadastro = async (e) => {
@@ -25,14 +28,16 @@ function CadastroUsuario() {
     setErro("");
 
     try {
-      const res = await api.post("/usuarios", form); // 👉 Corrigido para usar `api.post`
+      const response = await api.post("/usuarios", form);
 
-      setMensagem(res.data.mensagem || "Usuário cadastrado com sucesso!");
-      setForm({ email: "", senha: "" });
-    } catch (err) {
-      const msg = err.response?.data?.detail || "Erro ao cadastrar usuário.";
+      if (response.data?.mensagem) {
+        setMensagem(response.data.mensagem);
+        setForm({ email: "", senha: "" }); // Limpa o formulário
+      }
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+      const msg = error.response?.data?.detail || "Erro ao cadastrar usuário.";
       setErro(msg);
-      console.error("Erro no cadastro:", err);
     }
   };
 
@@ -66,6 +71,7 @@ function CadastroUsuario() {
           <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
             Cadastrar
           </Button>
+
           {mensagem && (
             <Alert severity="success" sx={{ mt: 2 }}>
               {mensagem}

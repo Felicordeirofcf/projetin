@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../api"; // 👉 Aqui trocamos axios por a importação do api configurado
+import api from "./api"; // ✅ Agora o caminho correto: "./api"
 import {
   Box,
   Button,
@@ -16,7 +16,11 @@ function Login({ setAutenticado }) {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value
+    }));
   };
 
   const handleLogin = async (e) => {
@@ -24,19 +28,17 @@ function Login({ setAutenticado }) {
     setErro("");
 
     try {
-      // 👉 Troquei axios.post por api.post
-      const res = await api.post("/login", form);
+      const response = await api.post("/login", form);
 
-      if (res.data.mensagem && res.data.token) {
-        // ✅ Armazena o token
-        localStorage.setItem("token", res.data.token);
-
+      if (response.data?.mensagem && response.data?.token) {
+        localStorage.setItem("token", response.data.token);
         setAutenticado(true);
         navigate("/");
       }
-    } catch (err) {
-      console.error("Erro no login:", err);
-      setErro("Email ou senha inválidos");
+    } catch (error) {
+      console.error("Erro no login:", error);
+      const msg = error.response?.data?.detail || "Email ou senha inválidos.";
+      setErro(msg);
     }
   };
 
@@ -67,9 +69,15 @@ function Login({ setAutenticado }) {
             value={form.senha}
             onChange={handleChange}
           />
-          <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
             Entrar
           </Button>
+
           {erro && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {erro}
