@@ -24,7 +24,7 @@ function Login({ setAutenticado }) {
     setErro("");
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/login", form);
+      const res = await axios.post("/login", form);
 
       if (res.data.mensagem && res.data.token) {
         // ✅ Armazena o token
