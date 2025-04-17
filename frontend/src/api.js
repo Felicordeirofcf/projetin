@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// Pega da variável de ambiente REACT_APP_API_URL
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL, // pegar do ambiente
 });
 
 api.interceptors.request.use(
