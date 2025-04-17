@@ -1,6 +1,6 @@
-// CadastroUsuario.js
+// src/pages/CadastroUsuario.js
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api"; // 👉 Agora importando o api configurado
 import {
   Box,
   Button,
@@ -25,13 +25,14 @@ function CadastroUsuario() {
     setErro("");
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/usuarios", form);
+      const res = await api.post("/usuarios", form); // 👉 Corrigido para usar `api.post`
+
       setMensagem(res.data.mensagem || "Usuário cadastrado com sucesso!");
       setForm({ email: "", senha: "" });
     } catch (err) {
-      const msg =
-        err.response?.data?.detail || "Erro ao cadastrar usuário.";
+      const msg = err.response?.data?.detail || "Erro ao cadastrar usuário.";
       setErro(msg);
+      console.error("Erro no cadastro:", err);
     }
   };
 
