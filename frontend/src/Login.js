@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api"; // 👉 Aqui trocamos axios por a importação do api configurado
 import {
   Box,
   Button,
@@ -24,7 +24,8 @@ function Login({ setAutenticado }) {
     setErro("");
 
     try {
-      const res = await axios.post("/login", form);
+      // 👉 Troquei axios.post por api.post
+      const res = await api.post("/login", form);
 
       if (res.data.mensagem && res.data.token) {
         // ✅ Armazena o token
@@ -34,6 +35,7 @@ function Login({ setAutenticado }) {
         navigate("/");
       }
     } catch (err) {
+      console.error("Erro no login:", err);
       setErro("Email ou senha inválidos");
     }
   };
