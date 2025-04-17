@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Força a URL de produção se estiver na Vercel
 const API_URL = process.env.NODE_ENV === "production"
   ? "https://calculoprojeto.onrender.com"
   : "http://127.0.0.1:8000";
