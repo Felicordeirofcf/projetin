@@ -1,14 +1,16 @@
 import axios from "axios";
 
-// 👉 Adicionei o console.log aqui para debug
-console.log("API URL usada:", process.env.REACT_APP_API_URL);
+// Força a URL de produção se estiver na Vercel
+const API_URL = process.env.NODE_ENV === "production"
+  ? "https://calculoprojeto.onrender.com"
+  : "http://127.0.0.1:8000";
 
-// Criação da instância do Axios com a URL do backend vinda da variável de ambiente
+console.log("API URL usada:", API_URL);
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: API_URL,
 });
 
-// Interceptador de requisições para incluir token JWT se existir
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
